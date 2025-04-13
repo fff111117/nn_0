@@ -1,0 +1,27 @@
+name: Build APK
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Unzip project
+      run: |
+        unzip *.zip -d project
+        cd project
+        chmod +x gradlew
+        
+    - name: Build APK
+      run: |
+        cd project
+        ./gradlew assembleDebug
+        
+    - name: Upload APK
+      uses: actions/upload-artifact@v2
+      with:
+        name: app
+        path: project/app/build/outputs/apk/debug/app-debug.apk
